@@ -11,16 +11,17 @@ import UIKit
 class UserTableViewCell: UITableViewCell {
     @IBOutlet weak var thumbnailimage: UIImageView!
     @IBOutlet weak var fullNameLabel: UILabel!
-
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    var user : User? {
+        didSet {
+            self.updateViews()
+        }
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
+    
+    private func updateViews() {
+        if let user = user {
+            //create loadImage based on string (URL) from API
+            self.fullNameLabel.text = "\(user.title) \(user.first) \(user.last)"
+        }
     }
-
 }

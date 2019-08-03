@@ -10,7 +10,7 @@ import Foundation
 
 class UsersController {
     
-    var users : Users!  //this is [User]
+    var users: [User] = []
     
     var baseURL = URL(string: "https://randomuser.me/api/")!
     
@@ -48,7 +48,8 @@ class UsersController {
             
             do {
                 let userDatas = try jsonDecdoer.decode(Users.self, from: data)
-                self.users = userDatas
+                let users = userDatas.results
+                self.users = users
                 print(userDatas)
                 completion(nil)
             } catch {

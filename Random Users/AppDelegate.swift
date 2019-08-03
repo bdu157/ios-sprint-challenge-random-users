@@ -6,14 +6,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         
-        let usersController = UsersController()
-        
-        usersController.getUsers(resultsNumber: 1000) { (error) in
-            if let error = error {
-                print("\(error)")
-                return
-            }
-        }
+//        let usersController = UsersController()
+//        
+//        usersController.getUsers(resultsNumber: 1000) { (error) in
+//            if let error = error {
+//                print("\(error)")
+//                return
+//            }
+//        }
         
         
         

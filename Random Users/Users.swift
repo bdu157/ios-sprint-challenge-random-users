@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Users: Decodable {
+struct Users: Decodable, Equatable {
     
     enum resultsKey: String, CodingKey {
         case results
@@ -24,7 +24,7 @@ struct Users: Decodable {
 
 //decoding part with no layers
 
-struct User: Decodable {
+struct User: Decodable, Equatable {
 
     
     enum UserKey: String, CodingKey {

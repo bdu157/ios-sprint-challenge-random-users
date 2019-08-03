@@ -49,7 +49,7 @@
                                 <connections>
                                     <outlet property="fullNameLabel" destination="0dJ-Nw-jO5" id="FdB-Wm-4WB"/>
                                     <outlet property="thumbnailimage" destination="EPl-wH-gmJ" id="nuA-YJ-N3I"/>
-                                    <segue destination="ezt-n9-rfp" kind="show" id="3QZ-xD-twI"/>
+                                    <segue destination="ezt-n9-rfp" kind="show" identifier="ToUserDetailVC" id="3QZ-xD-twI"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

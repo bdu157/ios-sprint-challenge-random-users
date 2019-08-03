@@ -7,6 +7,13 @@
 //
 
 import Foundation
+import UIKit
+
+enum NetworkError: Error {
+    case otherError
+    case badData
+    case noData
+}
 
 class UsersController {
     
@@ -56,6 +63,30 @@ class UsersController {
                 NSLog("unable to complete decoding \(error)")
                 completion(error)
             }
+        }.resume()
+    }
+    
+    func fetchLargeImage(at urlString: String, completion:@escaping(Result<UIImage, NetworkError>)->Void) {
+        let imageURL = URL(string: urlString)!
+        var request = URLRequest(url: imageURL)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) { (data, _, error) in
+            if let _ = error {
+                completion(.failure(.otherError))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(.badData))
+                return
+            }
+        
+            guard let image = UIImage(data: data) else {
+                completion(.failure(.noData))
+                return
+            }
+            completion(.success(image))
         }.resume()
     }
 }

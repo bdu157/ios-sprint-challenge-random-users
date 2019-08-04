@@ -32,7 +32,10 @@ class UserDetailViewController: UIViewController {
     private func updateViews() {
         if let user = user,
             let usersController = usersController {
-            self.nameLabel?.text = "\(user.title) \(user.first) \(user.last)"
+            let title = user.title.capitalized
+            let first = user.first.capitalized
+            let last = user.last.capitalized
+            self.nameLabel?.text = "\(title) \(first) \(last)"
             self.phoneNumberLabel?.text = user.phone
             self.emailAddressLabel?.text = user.email
             

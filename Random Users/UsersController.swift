@@ -80,7 +80,6 @@ class UsersController {
                 completion(.failure(.badData))
                 return
             }
-            
             completion(.success(data))
         }.resume()
     }

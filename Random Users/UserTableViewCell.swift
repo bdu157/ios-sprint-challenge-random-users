@@ -22,17 +22,20 @@ class UserTableViewCell: UITableViewCell {
     
     private func updateViews() {
         if let user = user {
-            self.fullNameLabel.text = "\(user.title) \(user.first) \(user.last)"
-            usersController.fetchLargeAndThumbnailImage(at: user.thumbnail) { (result) in
-                if let result = try? result.get() {
-                    DispatchQueue.main.async {
-                        let image = UIImage(data: result)
-                        self.thumbnailimage.image = image
-                    }
-                    guard let passedCache = self.cache else {return}
-                        passedCache.cache(value: result, for: user.email)
-                }
-            }
+            let title = user.title.capitalized
+            let first = user.first.capitalized
+            let last = user.last.capitalized
+            self.fullNameLabel.text = "\(title) \(first) \(last)"
+//            usersController.fetchLargeAndThumbnailImage(at: user.thumbnail) { (result) in
+//                if let result = try? result.get() {
+//                    DispatchQueue.main.async {
+//                        let image = UIImage(data: result)
+//                        self.thumbnailimage.image = image
+//                    }
+//                    guard let passedCache = self.cache else {return}
+//                        passedCache.cache(value: result, for: user.email)
+//                }
+//            }
         }
     }
 }

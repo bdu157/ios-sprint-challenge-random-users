@@ -17,6 +17,7 @@ class Cache<Key: Hashable, Value> {
         queue.async {
             self.cachedDatas[key] = value
         }
+        
     }
     
     func value(for key: Key) -> Value? {

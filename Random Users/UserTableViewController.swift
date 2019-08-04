@@ -41,7 +41,7 @@ class UserTableViewController: UITableViewController {
         guard let customCell = cell as? UserTableViewCell else {return UITableViewCell()}
             let user = usersController.users[indexPath.row]
             customCell.user = user
-           // self.loadImage(forCell: customCell, forRowAt: indexPath)
+            self.loadImage(forCell: customCell, forRowAt: indexPath)
         return cell
     }
     

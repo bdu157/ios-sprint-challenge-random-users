@@ -20,7 +20,6 @@ class UserTableViewCell: UITableViewCell {
     
     private func updateViews() {
         if let user = user {
-            //create loadImage based on string (URL) from API
             self.fullNameLabel.text = "\(user.title) \(user.first) \(user.last)"
         }
     }

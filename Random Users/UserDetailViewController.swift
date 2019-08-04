@@ -16,7 +16,7 @@ class UserDetailViewController: UIViewController {
     @IBOutlet weak var emailAddressLabel: UILabel!
     
     var usersController: UsersController?
-    var user: User? 
+    var user: User?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

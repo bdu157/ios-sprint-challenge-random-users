@@ -65,7 +65,7 @@ class UsersController {
         }.resume()
     }
     
-    func fetchLargeAndThumbnailImage(at urlString: String, completion:@escaping(Result<UIImage, NetworkError>)->Void) {
+    func fetchLargeAndThumbnailImage(at urlString: String, completion:@escaping(Result<Data, NetworkError>)->Void) {
         let imageURL = URL(string: urlString)!
         var request = URLRequest(url: imageURL)
         request.httpMethod = "GET"
@@ -80,12 +80,8 @@ class UsersController {
                 completion(.failure(.badData))
                 return
             }
-        
-            guard let image = UIImage(data: data) else {
-                completion(.failure(.noData))
-                return
-            }
-            completion(.success(image))
+            
+            completion(.success(data))
         }.resume()
     }
 }

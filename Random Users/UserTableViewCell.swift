@@ -13,13 +13,12 @@ class UserTableViewCell: UITableViewCell {
     @IBOutlet weak var fullNameLabel: UILabel!
 
     var usersController = UsersController()
-    //var cache: Cache<String, UIImage>?
+    var cache: Cache<String, Data>?
     var user : User? {
         didSet {
             self.updateViews()
         }
     }
-    
     
     private func updateViews() {
         if let user = user {
@@ -27,8 +26,11 @@ class UserTableViewCell: UITableViewCell {
             usersController.fetchLargeAndThumbnailImage(at: user.thumbnail) { (result) in
                 if let result = try? result.get() {
                     DispatchQueue.main.async {
-                        self.thumbnailimage.image = result
+                        let image = UIImage(data: result)
+                        self.thumbnailimage.image = image
                     }
+                    guard let passedCache = self.cache else {return}
+                        passedCache.cache(value: result, for: user.email)
                 }
             }
         }

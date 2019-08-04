@@ -41,9 +41,19 @@ class UserTableViewController: UITableViewController {
         guard let customCell = cell as? UserTableViewCell else {return UITableViewCell()}
             let user = usersController.users[indexPath.row]
             customCell.user = user
-            self.loadImage(forCell: customCell, forRowAt: indexPath)
+           // self.loadImage(forCell: customCell, forRowAt: indexPath)
         return cell
     }
+    
+    //add cancelling
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let user = usersController.users[indexPath.row]
+        
+        operations[user.email]?.cancel()
+        print("cancelling is happening")
+    }
+    
+    
     
     private func loadImage(forCell cell: UserTableViewCell, forRowAt indexPath: IndexPath) {
         let user = usersController.users[indexPath.row]

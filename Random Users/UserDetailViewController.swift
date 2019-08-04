@@ -17,6 +17,7 @@ class UserDetailViewController: UIViewController {
     
     var usersController: UsersController?
     var user: User?
+    var cache: Cache<String, Data>?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -38,8 +39,11 @@ class UserDetailViewController: UIViewController {
             usersController.fetchLargeAndThumbnailImage(at: user.large, completion: { (result) in
                 if let result = try? result.get() {
                     DispatchQueue.main.async {
-                        self.largeImageView.image = result
+                        let image = UIImage(data: result)
+                        self.largeImageView.image = image
                     }
+                    guard let passedCache = self.cache else {return}
+                    passedCache.cache(value: result, for: user.email)
                 }
             })
         }

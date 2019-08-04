@@ -46,16 +46,16 @@ struct User: Decodable, Equatable {
             }
         }
     
-    var title: String
-    var first: String
-    var last: String
+    let title: String
+    let first: String
+    let last: String
 
-    var email: String
-    var phone: String
+    let email: String
+    let phone: String
 
-    var large: String
-    var medium: String
-    var thumbnail: String
+    let large: String
+    let medium: String
+    let thumbnail: String
     
     //decode with no layers
     

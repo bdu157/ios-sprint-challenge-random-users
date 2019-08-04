@@ -12,6 +12,8 @@ class UserTableViewController: UITableViewController {
 
     var usersController = UsersController()
     var cache = Cache<String, Data>()
+    private var operations = [String : Operation]()
+    private var photoFetchQueue = OperationQueue()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,12 +48,49 @@ class UserTableViewController: UITableViewController {
     private func loadImage(forCell cell: UserTableViewCell, forRowAt indexPath: IndexPath) {
         let user = usersController.users[indexPath.row]
         
+        
+        let fetchPhotoOperation = FetchPhotoOperation(user: user)
+        
+        let cachedOperation = BlockOperation {
+            if let data = fetchPhotoOperation.imageData {
+                self.cache.cache(value: data, for: fetchPhotoOperation.email)
+            }
+        }
+        
+        let checkReuseOperation = BlockOperation {
+            defer {self.operations.removeValue(forKey: user.email)}
+                
+                if let currentIndexPath = self.tableView.indexPath(for: cell),
+                    currentIndexPath != indexPath {
+                    return
+                } else {
+                    if let data = fetchPhotoOperation.imageData {
+                        let image = UIImage(data: data)
+                        cell.thumbnailimage.image = image
+                    }
+                }
+            }
+        
+        cachedOperation.addDependency(fetchPhotoOperation)
+        checkReuseOperation.addDependency(fetchPhotoOperation)
+        
+        photoFetchQueue.addOperation(fetchPhotoOperation)
+        photoFetchQueue.addOperation(cachedOperation)
+        
+        //checkResueOperation should run in main queue since it will update UI - cell.thumbnailimage
+        OperationQueue.main.addOperation(checkReuseOperation)
+        
+        self.operations[user.email] = fetchPhotoOperation
+        
+        }
+    
+        
+        /*
         //loadImage - fetchImage could be used here as well but since we will need to remove this for NSOperation we will just go with a separate one
         if let cachedValue = cache.value(for: user.email) {
             let image = UIImage(data: cachedValue)
             cell.thumbnailimage.image = image
         }
-
 
         let request = URL(string: user.thumbnail)!
         URLSession.shared.dataTask(with: request) { (data, _, error) in
@@ -75,7 +114,8 @@ class UserTableViewController: UITableViewController {
                 cell.imageView?.image = image
             }
         }.resume()
-    }
+        
+        */
 
     // MARK: - Navigation
 
@@ -90,3 +130,4 @@ class UserTableViewController: UITableViewController {
     }
 
 }
+

@@ -35,7 +35,7 @@ class UserDetailViewController: UIViewController {
             self.phoneNumberLabel?.text = user.phone
             self.emailAddressLabel?.text = user.email
             
-            usersController.fetchLargeImage(at: user.large, completion: { (result) in
+            usersController.fetchLargeAndThumbnailImage(at: user.large, completion: { (result) in
                 if let result = try? result.get() {
                     DispatchQueue.main.async {
                         self.largeImageView.image = result

@@ -57,7 +57,6 @@ class UsersController {
                 let userDatas = try jsonDecdoer.decode(Users.self, from: data)
                 let users = userDatas.results
                 self.users = users
-                print(userDatas)
                 completion(nil)
             } catch {
                 NSLog("unable to complete decoding \(error)")
@@ -66,7 +65,7 @@ class UsersController {
         }.resume()
     }
     
-    func fetchLargeImage(at urlString: String, completion:@escaping(Result<UIImage, NetworkError>)->Void) {
+    func fetchLargeAndThumbnailImage(at urlString: String, completion:@escaping(Result<UIImage, NetworkError>)->Void) {
         let imageURL = URL(string: urlString)!
         var request = URLRequest(url: imageURL)
         request.httpMethod = "GET"

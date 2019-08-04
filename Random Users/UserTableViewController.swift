@@ -11,6 +11,7 @@ import UIKit
 class UserTableViewController: UITableViewController {
 
     var usersController = UsersController()
+    var cache = Cache<String, Data>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,7 @@ class UserTableViewController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
+        //fetching Thumbnail photos
     }
 
     // MARK: - Table view data source
@@ -45,6 +47,12 @@ class UserTableViewController: UITableViewController {
         let user = usersController.users[indexPath.row]
         
         //loadImage - fetchImage could be used here as well but since we will need to remove this for NSOperation we will just go with a separate one
+        if let cachedValue = cache.value(for: user.email) {
+            let image = UIImage(data: cachedValue)
+            cell.thumbnailimage.image = image
+        }
+
+
         let request = URL(string: user.thumbnail)!
         URLSession.shared.dataTask(with: request) { (data, _, error) in
             if let error = error {
@@ -61,13 +69,13 @@ class UserTableViewController: UITableViewController {
                 return
             }
             //caching here
-            
+            self.cache.cache(value: data, for: user.email)
+        
             DispatchQueue.main.sync {
                 cell.imageView?.image = image
             }
         }.resume()
     }
-
 
     // MARK: - Navigation
 

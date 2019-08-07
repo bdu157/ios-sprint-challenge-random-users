@@ -39,16 +39,26 @@ class UserDetailViewController: UIViewController {
             self.phoneNumberLabel?.text = user.phone
             self.emailAddressLabel?.text = user.email
             
-            usersController.fetchLargeAndThumbnailImage(at: user.large, completion: { (result) in
+            
+            //using phone to differentiate cached largeImage from cached thumbnail image which is using email as its key
+            if let cachedValue = self.cache?.value(for: user.phone) {
+                let image = UIImage(data: cachedValue)
+                self.largeImageView.image = image
+                print("large image being shown from cachedValue")
+            } else {
+            
+            usersController.fetchLargeImage(at: user.large, completion: { (result) in
                 if let result = try? result.get() {
                     DispatchQueue.main.async {
                         let image = UIImage(data: result)
                         self.largeImageView.image = image
+                        print("fetchLargeImage closure being called")
                     }
-                    guard let passedCache = self.cache else {return}
-                    passedCache.cache(value: result, for: user.email)
-                }
-            })
+                    self.cache?.cache(value: result, for: user.phone)  //caching the data
+                    print("caching for largeImage: \(user.phone)")
+                    }
+                })
+            }
         }
     }
 }

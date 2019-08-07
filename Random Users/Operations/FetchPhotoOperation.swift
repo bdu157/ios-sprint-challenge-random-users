@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 class FetchPhotoOperation: ConcurrentOperation {
     var imageData: Data?
     var dataTask: URLSessionDataTask?
@@ -18,7 +19,7 @@ class FetchPhotoOperation: ConcurrentOperation {
         let request = URL(string: self.thumbnail)
         
         let task = URLSession.shared.dataTask(with: request!) { (data, _, error) in
-            if self.isCancelled {return}
+            //if self.isCancelled {return}
             
             if let error = error {
                 NSLog("there is an error in getting data")
@@ -59,4 +60,5 @@ class FetchPhotoOperation: ConcurrentOperation {
         self.thumbnail = user.thumbnail
     }
 }
+
 

@@ -14,6 +14,7 @@ class UserTableViewController: UITableViewController {
     var cache = Cache<String, Data>()
     private var operations = [String : Operation]()
     private var photoFetchQueue = OperationQueue()
+    //var users: User = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +41,7 @@ class UserTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath)
         guard let customCell = cell as? UserTableViewCell else {return UITableViewCell()}
             let user = usersController.users[indexPath.row]
-            customCell.user = user
+                customCell.user = user
             self.loadImage(forCell: customCell, forRowAt: indexPath)
         return cell
     }
@@ -54,32 +55,39 @@ class UserTableViewController: UITableViewController {
     }
     
     
-    
     private func loadImage(forCell cell: UserTableViewCell, forRowAt indexPath: IndexPath) {
+    
         let user = usersController.users[indexPath.row]
         
+        if let cachedValue = self.cache.value(for: user.email) {
+            let image = UIImage(data: cachedValue)
+            cell.thumbnailimage.image = image
+            print("using cachedThumnail image for \(user.email)")
+        } else {
         
         let fetchPhotoOperation = FetchPhotoOperation(user: user)
         
         let cachedOperation = BlockOperation {
             if let data = fetchPhotoOperation.imageData {
-                self.cache.cache(value: data, for: fetchPhotoOperation.email)
+                self.cache.cache(value: data, for: user.email)
+                print("caching thumbnail for: \(user.email)")
             }
         }
         
         let checkReuseOperation = BlockOperation {
-            defer {self.operations.removeValue(forKey: user.email)}
+            //defer {self.operations.removeValue(forKey: user.phone)}
                 
                 if let currentIndexPath = self.tableView.indexPath(for: cell),
                     currentIndexPath != indexPath {
                     return
-                } else {
+                }
+        
                     if let data = fetchPhotoOperation.imageData {
                         let image = UIImage(data: data)
                         cell.thumbnailimage.image = image
+                        //self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                        }
                     }
-                }
-            }
         
         cachedOperation.addDependency(fetchPhotoOperation)
         checkReuseOperation.addDependency(fetchPhotoOperation)
@@ -92,6 +100,7 @@ class UserTableViewController: UITableViewController {
         
         self.operations[user.email] = fetchPhotoOperation
         
+            }
         }
     
         
@@ -136,6 +145,7 @@ class UserTableViewController: UITableViewController {
                 let selectedRow = tableView.indexPathForSelectedRow else {return}
             destVC.usersController = self.usersController
             destVC.user = self.usersController.users[selectedRow.row]
+            destVC.cache = self.cache
         }
     }
 
